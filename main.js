@@ -34,6 +34,7 @@ for (c = 0; c < brickColumnCount; c++) {
     bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
+var randColor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 // key event
 function mouseMoveHandler(e) {
   var relativeX = e.clientX - canvas.offsetLeft;
@@ -62,12 +63,21 @@ function drawLives() {
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
+// function drawBall() {
+//   ctx.beginPath();
+//   ctx.arc(x, y, ballRadius, 0, 2 * Math.PI);
+//   ctx.fillstyle = "#0033FF";
+//   ctx.fillStroke = "#0033FF";
+//   ctx.Stroke = "10";
+//   ctx.fill();
+//   ctx.closePath();
+// }
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, 2 * Math.PI);
-  ctx.fillstyle = "#0033FF";
-  ctx.fillStroke = "#0033FF";
-  ctx.Stroke = "10";
+  colorMaker = function(color) {
+    return ctx.fillstyle = randColor;
+  };
   ctx.fill();
   ctx.closePath();
 }
@@ -174,6 +184,8 @@ function draw() {
 }
 
 draw();
+
+
 
 
 
