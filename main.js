@@ -2,7 +2,6 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 //to move
-
 var x = canvas.width / 2;
 var y = canvas.height - 30;
 var dx = 2;
@@ -12,8 +11,8 @@ var paddleWidth = 75;
 var paddleX = (canvas.width - paddleWidth) / 2;
 var rightPressed = false;
 var leftPressed = false;
-var brickRowCount = 3;
-var brickColumnCount = 5;
+var brickRowCount = 5;
+var brickColumnCount = 3;
 var brickWidth = 75;
 var brickHeight = 20;
 var brickPadding = 10;
@@ -21,11 +20,14 @@ var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var score = 0;
 var lives = 3;
-
-
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+var randColor =
+  "rgb(" +
+  Math.floor(Math.random() * 256) +
+  "," +
+  Math.floor(Math.random() * 256) +
+  "," +
+  Math.floor(Math.random() * 256) +
+  ")";
 
 var bricks = [];
 for (c = 0; c < brickColumnCount; c++) {
@@ -34,7 +36,11 @@ for (c = 0; c < brickColumnCount; c++) {
     bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
-var randColor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
 // key event
 function mouseMoveHandler(e) {
   var relativeX = e.clientX - canvas.offsetLeft;
@@ -57,56 +63,6 @@ function keyUpHandler(e) {
     leftPressed = false;
   }
 }
-// Draw functions
-function drawLives() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD";
-  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
-}
-// function drawBall() {
-//   ctx.beginPath();
-//   ctx.arc(x, y, ballRadius, 0, 2 * Math.PI);
-//   ctx.fillstyle = "#0033FF";
-//   ctx.fillStroke = "#0033FF";
-//   ctx.Stroke = "10";
-//   ctx.fill();
-//   ctx.closePath();
-// }
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, 2 * Math.PI);
-  colorMaker = function(color) {
-    return ctx.fillstyle = randColor;
-  };
-  ctx.fill();
-  ctx.closePath();
-}
-
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillstyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}
-function drawBricks() {
-  for (c = 0; c < brickColumnCount; c++) {
-    for (r = 0; r < brickRowCount; r++) {
-      if (bricks[c][r].status == 1) {
-        var brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-        var brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
-}
-
 function collisionDetection() {
   for (c = 0; c < brickColumnCount; c++) {
     for (r = 0; r < brickRowCount; r++) {
@@ -119,9 +75,9 @@ function collisionDetection() {
           y < b.y + brickHeight
         ) {
           dy = -dy;
-					b.status = 0;
-					score++;
-					if (score == brickRowCount * brickColumnCount) {
+          b.status = 0;
+          score++;
+          if (score == brickRowCount * brickColumnCount) {
             alert("YOU WIN, CONGRATULATIONS!");
             document.location.reload();
           }
@@ -130,6 +86,43 @@ function collisionDetection() {
     }
   }
 }
+// Draw functions
+function drawBall() {
+  ctx.beginPath();
+  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+// function helper(){
+  
+// }
+function drawPaddle() {
+  ctx.beginPath();
+  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+function drawBricks() {
+  for (c = 0; c < brickColumnCount; c++) {
+    for (r = 0; r < brickRowCount; r++) {
+      if (bricks[c][r].status == 1) {
+        var brickX = r * (brickWidth + brickPadding) + brickOffsetLeft;
+        var brickY = c * (brickHeight + brickPadding) + brickOffsetTop;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+}
+
+
 function drawScore() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
@@ -145,9 +138,10 @@ function draw() {
   drawBricks();
   drawBall();
   drawPaddle();
-	collisionDetection();
-	drawScore();
-	drawLives();
+  drawScore();
+  drawLives();
+  collisionDetection();
+
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
@@ -155,33 +149,33 @@ function draw() {
     dy = -dy;
   } else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
-      if ((y = y - paddleHeight)) {
-        dy = -dy;
-      }
+      dy = -dy;
     } else {
       lives--;
       if (!lives) {
-        alert("GAME OVER");
+        console.log("GAME OVER");
         document.location.reload();
       } else {
         x = canvas.width / 2;
         y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
+        dx = 3;
+        dy = -3;
         paddleX = (canvas.width - paddleWidth) / 2;
       }
     }
   }
+
   if (rightPressed && paddleX < canvas.width - paddleWidth) {
     paddleX += 7;
   } else if (leftPressed && paddleX > 0) {
     paddleX -= 7;
   }
 
-  x = x + dx;
-	y = y + dy;
-	requestAnimationFrame(draw);
+  x += dx;
+  y += dy;
+  requestAnimationFrame(draw);
 }
+
 
 draw();
 
@@ -199,3 +193,14 @@ draw();
 6. Add more points per brick hit, print out the number of collected points in the end game alert box.
 7. Adjust the boundaries of the paddle movement, so the whole paddle will be visible on both edges of the Canvas instead of only half of it.
 9. Change the number of lives and the angle the ball bounces off the paddle*/
+
+// var Ball = function(){
+//    ctx.beginPath();
+//    ctx.arc(x, y, ballRadius, 0, 2 * Math.PI);
+//    color = function(randColor) {
+//      return (ctx.fillstyle = randColor);
+//    };
+//    ctx.fill();
+//    ctx.closePath();
+// }
+// Ball.color(randColor);
