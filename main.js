@@ -90,7 +90,8 @@ function collisionDetection() {
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = "#0095DD";
+  ballChanger('blue')
+  // ctx.fillStyle = "#0095DD";
   ctx.fill();
   ctx.closePath();
 }
@@ -176,13 +177,13 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-
 draw();
 
 
-
-
-
+1.
+function ballChanger(color){
+    ctx.fillStyle = color;
+}
 
 /*Exercise:
 1. Try changing the color of the ball to a random colour every time it hits the wall.
@@ -190,9 +191,11 @@ draw();
 3. Make the ball move faster when it hits the paddle.
 4. Try changing the number of bricks in a row or a column, or their positions.
 5. Change the color of the ball when it hits the brick.
+
 6. Add more points per brick hit, print out the number of collected points in the end game alert box.
 7. Adjust the boundaries of the paddle movement, so the whole paddle will be visible on both edges of the Canvas instead of only half of it.
 9. Change the number of lives and the angle the ball bounces off the paddle*/
+
 
 // var Ball = function(){
 //    ctx.beginPath();
@@ -203,4 +206,5 @@ draw();
 //    ctx.fill();
 //    ctx.closePath();
 // }
+
 // Ball.color(randColor);
